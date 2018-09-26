@@ -15,9 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
-import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -40,7 +38,7 @@ public class AudioRecorderManager {
     }
 
     //音频输入-麦克风
-    public final static int AUDIO_INPUT = MediaRecorder.AudioSource.MIC;
+    private final static int AUDIO_INPUT = MediaRecorder.AudioSource.MIC;
     //采用频率
     //44100是目前的标准，但是某些设备仍然支持22050，16000，11025
     //采样频率一般共分为22.05KHz、44.1KHz、48KHz三个等级
@@ -48,9 +46,9 @@ public class AudioRecorderManager {
     //声道 单声道
     public final static int AUDIO_CHANNEL = AudioFormat.CHANNEL_IN_MONO;
     //编码
-    public final static int AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
+    private final static int AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
     // 缓冲区字节大小
-    public int bufferSizeInBytes = 0;
+    private int bufferSizeInBytes = 0;
     //录音对象
     private AudioRecord audioRecord;
 
@@ -114,11 +112,10 @@ public class AudioRecorderManager {
         mExecutorService.execute(new Runnable() {
             @Override
             public void run() {
-                if (status == Status.STATUS_START) {
-                    mTimeHandler.postDelayed(this,1000);
-                }else{
+                if (status != Status.STATUS_START) {
                     return;
                 }
+                mTimeHandler.postDelayed(this,1000);
                 SimpleDateFormat simpleDateFormat=new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
                 mTotalTime=(System.currentTimeMillis()-mStartTime) - TimeZone.getDefault().getRawOffset();
                 listener.recorderRefreshTime(simpleDateFormat.format(mTotalTime));
