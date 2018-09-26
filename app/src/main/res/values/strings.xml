@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">RecordDemo</string>
+    <string name="recorder_title">调整录音文件保存格式在开始录音前选中</string>
+    <string name="recorder_start">开始录音</string>
+    <string name="recorder_stop">停止录音</string>
+    <string name="recorder_list">音频列表</string>
+    <string name="recorder_type">存储格式：</string>
+    <string name="recorder_type_wav">wav</string>
+    <string name="recorder_type_raw">raw</string>
+    <string name="recorder_type_mp3">mp3</string>
+    <string name="recorder_time">00:00:00</string>
+</resources>

@@ -1,0 +1,69 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.example.record"
+        minSdkVersion 17
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags ""
+                abiFilters 'armeabi-v7a','arm64-v8a','mips','mips64','x86','x86_64' //要支持的abi
+                }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+
+    //解决 More than one file was found with OS independent path 'lib/x86_64/liblame-mp3-utils.so' 报错
+    packagingOptions {
+        //Paths that match a first-pick pattern will be selected into the APK.
+        //If more than one path matches the first-pick, only the first found will be selected.
+        pickFirst 'lib/armeabi-v7a/liblame-mp3-utils.so'
+        pickFirst 'lib/arm64-v8a/liblame-mp3-utils.so'
+        pickFirst 'lib/armeabi/liblame-mp3-utils.so'
+        pickFirst 'lib/x86/liblame-mp3-utils.so'
+        pickFirst 'lib/mips/liblame-mp3-utils.so'
+        pickFirst 'lib/mips64/liblame-mp3-utils.so'
+        pickFirst 'lib/x86_64/liblame-mp3-utils.so'
+    }
+
+    sourceSets {//将so库地址指定为libs目录下
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:28.+'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    // butterknife
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    // weakHandler
+    implementation 'com.badoo.mobile:android-weak-handler:1.1'
+}
+
+
+// 指定编码
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
